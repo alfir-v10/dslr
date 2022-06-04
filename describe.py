@@ -12,12 +12,44 @@ def get_mean(array):
     return array.sum() / array.shape[0]
 
 
-# TODO: diffs
+def get_unique(array):
+    return len(set(array))
+
+
 def get_std(array):
     return np.sqrt(np.sum(np.power(array - get_mean(array), 2)) / array.shape[0])
 
 
-# TODO: diffs
+def get_var(array):
+    return np.sum(np.power(array - get_mean(array), 2)) / array.shape[0]
+
+
+def get_freq(array):
+    freq = dict().fromkeys(array, 0)
+    for arr in array:
+        if arr in freq:
+            freq[arr] += 1
+    max_value = freq[array[0]]
+    for k, v in freq.items():
+        if v >= max_value:
+            max_value = v
+    return max_value
+
+
+def get_top(array):
+    freq = dict().fromkeys(array, 0)
+    for arr in array:
+        if arr in freq:
+            freq[arr] += 1
+    max_value = freq[array[0]]
+    max_value_key = None
+    for k, v in freq.items():
+        if v >= max_value:
+            max_value = v
+            max_value_key = k
+    return max_value_key
+
+
 def get_quartile(array, perc):
     array = np.sort(array)
     per = (perc / 100) * array.shape[0]
@@ -43,7 +75,7 @@ def get_max(array):
     return max_arr
 
 
-#hard way without pd.read_csv
+# hard way without pd.read_csv
 def load_data(path):
     with open(path, 'r') as f:
         lines = [line.rstrip().split(',') for line in f.readlines()]
@@ -61,7 +93,9 @@ def describe(path):
     print(df.head())
     print(df.describe())
     print(df.columns)
-    statistics = ['count', 'mean', 'std', 'min', '25%', '50%', '75%', 'max']
+    statistics = ['count', 'mean', 'std', 'min',
+                  '25%', '50%', '75%', 'max',
+                  'var', 'unique', 'top', 'freq']
 
     df_numerical = df.iloc[:, 6:]
     statistics_dict = dict().fromkeys(df_numerical.columns, [])
@@ -77,7 +111,6 @@ def describe(path):
     for k, v in statistics_dict.items():
         print(k, v)
     df_new = pd.DataFrame(data=statistics_dict, index=statistics)
-    # df_describe = df.iloc[:, 1:].describe()
     print(df_new)
 
 
