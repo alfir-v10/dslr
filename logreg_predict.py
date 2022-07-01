@@ -9,7 +9,10 @@ def predict(path_dataset, path_weights):
     columns = df.columns.tolist()
     df = df.loc[:, columns[0:1] + columns[5:]]
     x_data = df.iloc[:, 1:].values
-
+    x_data = df[['Astronomy', 'Herbology',
+                 'Defense Against the Dark Arts', 'Divination', 'Muggle Studies',
+                 'Ancient Runes', 'History of Magic', 'Transfiguration', 'Potions',
+                 'Charms', 'Flying']]  # 'Care of Magical Creatures', 'Arithmancy'
     scaler = StandardScaler()
     x_data = scaler.fit_transform(x_data)
     model = LogisticRegression().load_weights(path_weights)
